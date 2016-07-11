@@ -1,0 +1,17 @@
+{
+  "name": "Countries and Capitals",
+  "authors": [
+    "Diana Duong <dduong013@gmail.com>"
+  ],
+  "description": "an Angular app that allows users to search and visualize data about countries and capital citie",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
