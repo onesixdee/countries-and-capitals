@@ -7,8 +7,12 @@
 		<th>Population</th>
 		<th>Continent</th>
 	</tr>
-	<tr ng-repeat="country in countries | orderBy: 'countryCode'">
-		<td>{{ vm.country.countryName }}</td>
+	<tr ng-repeat="country in geonames | orderBy: 'countryName'">
+		<td>{{ country.countryName }}</td>
+		<td>{{ country.countryCode }}</td>
+		<td>{{ country.capital }}</td>
+		<td>{{ country.areaInSqKm }}</td>
+		<td>{{ country.population }}</td>
+		<td>{{ country.continent }}</td>
 	</tr>
 </table>
-
