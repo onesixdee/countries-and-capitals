@@ -15,35 +15,28 @@ angular
 			controller : 'CountryDetailCtrl as vm'
 		})
 	}])
-	.constant('cc_endpoint', 'http://api.geonames.org/countryInfo?')
-  	.constant('cc_countries_json', './cc-countries.json')
+	.constant('cc_endpoint', 'http://api.geonames.org/countryInfoJSON?')
+  	.constant('cc_username', 'onesixdee')
 
-	.factory('countriesList', ['$http', '$q', 'cc_endpoint', 'cc_countries_json', function($http, $q, cc_endpoint, cc_countries_json){
-		return function(params){
-
-		var reqParams = {
-			country : 'default',
-			lang : 'default',
-			type: 'JSON'
-		};
-		return $http.get(cc_countries_json, {params: reqParams})
+	.factory('countriesJSON', ['$http', '$q', 'cc_endpoint', 'cc_username', function($http, $q, cc_endpoint, cc_username){
+		return function(){
+		return $http.get()
 			.then(function(response){
-				return $q.when(response.data);
+				return $q.when(response.geonames);
 			})
 		};
 	}])
 	.controller('HomeCtrl', function(){
 
 	})
-	.controller('CountryListCtrl', ['$scope', 'countriesList', function($scope, countriesList){ 	
-		countriesList()
+	.controller('CountryListCtrl', ['$scope', 'countriesJSON', function($scope, countriesJSON){ 	
+		countriesJSON()
 			.then(function(response) {
-		    	$scope.data = response.data;
+		    	$scope.geonames = response.geonames;
 		})
 	}])
-	.controller('CountryDetailCtrl',['$scope', 'countriesList',function($scope, countriesList){ 
-		countriesList()
+	.controller('CountryDetailCtrl', ['$scope', 'countriesJSON', function($scope, countriesJSON){ 
+		countriesJSON()
 			.then(function(response) {
-		    	$scope.data = response.data;
 		})
-	}])
+}])
