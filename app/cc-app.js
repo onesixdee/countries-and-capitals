@@ -15,7 +15,8 @@ angular
 			controller : 'CountryDetailCtrl as vm'
 		})
 	}])
-
+	.constant('cc_endpoint', 'http://api.geonames.org/countryInfo?')
+  	.constant('cc_countries_json', './cc-countries.json')
 
 	.factory('countriesList', ['$http', '$q', 'cc_endpoint', 'cc_countries_json', function($http, $q, cc_endpoint, cc_countries_json){
 		return function(params){
