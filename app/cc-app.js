@@ -20,10 +20,13 @@ angular
 
 	.factory('countriesJSON', ['$http', '$q', 'cc_endpoint', 'cc_username', function($http, $q, cc_endpoint, cc_username){
 		return function(){
-		return $http.get()
-			.then(function(response){
-				return $q.when(response.geonames);
-			})
+
+		var url = cc_endpoint;
+
+		return $http.get(url + 'username=' + cc_username, {cache: true})
+        		.then(function(response){
+          			return $q.when(response.data);
+        		});
 		};
 	}])
 	.controller('HomeCtrl', function(){
