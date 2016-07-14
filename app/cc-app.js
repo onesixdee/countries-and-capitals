@@ -16,24 +16,25 @@ angular
 			controller : 'CountryDetailCtrl as vm'
 		})
 	}])
-	.constant('cc_endpoint', 'http://api.geonames.org/countryInfoJSON?')
+	.constant('cc_countryInfo_url', 'http://api.geonames.org/countryInfoJSON?')
+	.constant('cc_neighbours_url', 'http://api.geonames.org/neighboursJSON?')
   	.constant('cc_username', 'onesixdee')
 
-	.factory('countriesJSON', ['$http', '$q', 'cc_endpoint', 'cc_username', function($http, $q, cc_endpoint, cc_username){
+	.factory('countriesJSON', ['$http', '$q', 'cc_countryInfo_url', 'cc_username', function($http, $q, cc_endpoint, cc_username){
 
 		return function(countryCode){
 			console.log(countryCode, 'countryCode')
 
-		var url = cc_endpoint;
+			var countryInfo_url = cc_countryInfo_url;
 
-		if (countryCode){
-  			url += 'country=' + countryCode + '&';
-  		}
+			if (countryCode){
+	  			countryInfo_url += 'country=' + countryCode + '&';
+	  		}
 
-		return $http.get(url + 'username=' + cc_username, {cache: true})
-    		.then(function(response){
-      			return $q.when(response.data);
-    		});
+			return $http.get(url + 'username=' + cc_username, {cache: true})
+	    		.then(function(response){
+	      			return $q.when(response.data);
+	    		});
 		};
 	}])
 	.controller('HomeCtrl', function(){
