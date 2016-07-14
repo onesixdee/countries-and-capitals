@@ -16,27 +16,35 @@ angular
 			controller : 'CountryDetailCtrl as vm'
 		})
 	}])
-	.constant('cc_countryInfo_url', 'http://api.geonames.org/countryInfoJSON?')
-	.constant('cc_neighbours_url', 'http://api.geonames.org/neighboursJSON?')
+	.constant('cc_countryInfoJSON', 'http://api.geonames.org/countryInfoJSON?')
+	.constant('cc_neighboursJSON', 'http://api.geonames.org/neighboursJSON?')
   	.constant('cc_username', 'onesixdee')
 
-	.factory('countriesJSON', ['$http', '$q', 'cc_countryInfo_url', 'cc_username', function($http, $q, cc_endpoint, cc_username){
+	.factory('countriesJSON', ['$http', '$q', 'cc_countryInfoJSON', 'cc_username', function($http, $q, cc_countryInfoJSON, cc_username){
 
 		return function(countryCode){
 			console.log(countryCode, 'countryCode')
 
-			var countryInfo_url = cc_countryInfo_url;
+			var countryJSON = cc_countryInfoJSON;
 
 			if (countryCode){
-	  			countryInfo_url += 'country=' + countryCode + '&';
+	  			countryJSON += 'country=' + countryCode + '&';
 	  		}
-
-			return $http.get(url + 'username=' + cc_username, {cache: true})
+			return $http.get(countryJSON + 'username=' + cc_username, {cache: true})
 	    		.then(function(response){
 	      			return $q.when(response.data);
 	    		});
 		};
 	}])
+
+	.factory('neighboursJSON', function($http, $q, cc_neighboursJSON, cc_username){
+		return function(){
+			return $http.get(cc_neighboursJSON + 'username=' + cc_username, {cache: true})
+	    		.then(function(response){
+	      			return $q.when(response.data);
+	    		});
+		}
+	})
 	.controller('HomeCtrl', function(){
 
 	})
@@ -54,4 +62,9 @@ angular
 				.then(function(response) {
 					console.log(response)
 			})
+
+			neighboursJSON()
+				.then(function(response){
+					console.log(response)
+				})
 }])
