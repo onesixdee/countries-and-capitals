@@ -18,6 +18,7 @@ angular
 	}])
 	.constant('cc_countryInfoJSON', 'http://api.geonames.org/countryInfoJSON?')
 	.constant('cc_neighboursJSON', 'http://api.geonames.org/neighboursJSON?')
+	.constant('cc_searchJSON', 'http://api.geonames.org/searchJSON?')
   	.constant('cc_username', 'onesixdee')
 
 	.factory('countriesJSON', ['$http', '$q', 'cc_countryInfoJSON', 'cc_username', function($http, $q, cc_countryInfoJSON, cc_username){
@@ -25,12 +26,12 @@ angular
 		return function(countryCode){
 			console.log(countryCode, 'countryCode')
 
-			var countryJSON = cc_countryInfoJSON;
+			var countryURL = cc_countryInfoJSON;
 
 			if (countryCode){
-	  			countryJSON += 'country=' + countryCode + '&';
+	  			countryURL+= 'country=' + countryCode + '&';
 	  		}
-			return $http.get(countryJSON + 'username=' + cc_username, {cache: true})
+			return $http.get(countryURL + 'username=' + cc_username, {cache: true})
 	    		.then(function(response){
 	      			return $q.when(response.data);
 	    		});
@@ -38,7 +39,13 @@ angular
 	}])
 
 	.factory('neighboursJSON', function($http, $q, cc_neighboursJSON, cc_username){
-		return function(){
+		
+		return function(countryCode){
+			console.log(countryCode)
+
+			if(countryCode){
+				cc_neighboursJSON += 'country=' + countryCode + '&';
+			}
 			return $http.get(cc_neighboursJSON + 'username=' + cc_username, {cache: true})
 	    		.then(function(response){
 	      			return $q.when(response.data);
@@ -56,15 +63,17 @@ angular
 			    	$scope.geonames = response.geonames;
 			})
 	}])
-	.controller('CountryDetailCtrl', ['$scope', '$routeParams', 'countriesJSON', function($scope, $routeParams, countriesJSON){
+	.controller('CountryDetailCtrl', ['$scope', '$routeParams', 'countriesJSON', 'neighboursJSON', function($scope, $routeParams, countriesJSON, neighboursJSON){
 
 			countriesJSON($routeParams.countryCode)
 				.then(function(response) {
+					// $scope.geonames = response.geonames;
 					console.log(response)
 			})
 
-			neighboursJSON()
+			neighboursJSON($routeParams.countryCode)
 				.then(function(response){
+					$scope.geonames = response.geonames;
 					console.log(response)
 				})
 }])
